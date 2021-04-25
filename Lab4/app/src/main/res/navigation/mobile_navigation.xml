@@ -14,7 +14,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/home_dest">
+    app:startDestination="@id/home_dest">
     <fragment
         android:id="@+id/home_dest"
         android:name="com.example.android.codelabs.navigation.HomeFragment"
@@ -22,13 +22,13 @@
         tools:layout="@layout/home_fragment">
 
         <!-- TODO STEP 7.1 - Add action with transitions -->
-        <!--<action-->
-            <!--android:id="@+id/next_action"-->
-            <!--app:destination="@+id/flow_step_one_dest"-->
-            <!--app:enterAnim="@anim/slide_in_right"-->
-            <!--app:exitAnim="@anim/slide_out_left"-->
-            <!--app:popEnterAnim="@anim/slide_in_left"-->
-            <!--app:popExitAnim="@anim/slide_out_right" />-->
+        <action
+            android:id="@+id/flowStep2Tohome"
+            app:destination="@id/flow_step_one_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <!-- TODO END STEP 7.1 -->
 
     </fragment>
@@ -43,7 +43,7 @@
             android:defaultValue="1"/>
 
         <action
-            android:id="@+id/next_action"
+            android:id="@+id/flowStep2Tohome"
             app:destination="@+id/flow_step_two_dest">
         </action>
     </fragment>
@@ -59,9 +59,8 @@
             android:defaultValue="2"/>
 
         <action
-            android:id="@+id/next_action"
-            app:popUpTo="@id/home_dest">
-        </action>
+            android:id="@+id/flowStep2Tohome"
+            app:destination="@id/home_dest"></action>
     </fragment>
 
     <!-- TODO STEP 4 Create a new navigation destination pointing to SettingsFragment -->
