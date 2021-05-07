@@ -1,30 +1,17 @@
 package com.example.carddemo
 
-import android.graphics.drawable.Drawable
+
+import android.icu.number.NumberFormatter.with
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.carddemo.services.dto.TechTalkDto
+import com.squareup.picasso.Picasso
 
-class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
-
-    private val titles = arrayOf("Chapter One",
-        "Chapter Two", "Chapter Three", "Chapter Four",
-        "Chapter Five", "Chapter Six", "Chapter Seven",
-        "Chapter Eight")
-
-    private val details = arrayOf("Item one details", "Item two details",
-        "Item three details", "Item four details",
-        "Item file details", "Item six details",
-        "Item seven details", "Item eight details")
-
-    private val images = intArrayOf(R.drawable.kotlin,
-        R.drawable.kotlin, R.drawable.kotlin,
-        R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background, R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background)
+class RecyclerAdapter(val results: List<TechTalkDto>): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -45,12 +32,13 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        holder.itemTitle.text = titles[position]
-        holder.itemImage.setImageResource(images[position])
+        val techTalkDto = results?.get(position)
+        holder.itemTitle.text = techTalkDto?.name
+        Picasso.get().load(techTalkDto?.urlImage).into(holder.itemImage)
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return results.size
     }
 
 

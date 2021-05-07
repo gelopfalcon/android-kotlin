@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Falcon</string>
+    <string name="app_name">CardDemo</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello, I am the English version</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="internet_connection">Please check your internet connection and try again</string>
 </resources>

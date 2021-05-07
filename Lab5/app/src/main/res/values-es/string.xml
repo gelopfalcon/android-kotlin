@@ -3,4 +3,5 @@
     <string name="app_name">Card demo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="internet_connection">Por favor revisar su acceso a Internet y revisar de nuevo</string>
 </resources>
