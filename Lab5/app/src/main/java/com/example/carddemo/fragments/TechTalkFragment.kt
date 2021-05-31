@@ -1,6 +1,5 @@
 package com.example.carddemo.fragments
 
-import TechTalkService
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,35 +9,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.carddemo.R
 import com.example.carddemo.RecyclerAdapter
 import com.example.carddemo.databinding.FragmentBlankBinding
-import com.example.carddemo.services.dto.TechTalkDto
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.example.carddemo.viewmodels.TechTalkViewModel
 
 
 /**
  * A simple [Fragment] subclass.
- * Use the [BlankFragment.newInstance] factory method to
+ * Use the [TechTalkFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BlankFragment : Fragment() {
+class TechTalkFragment : Fragment() {
 
+    private val model: TechTalkViewModel by viewModels()
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
-    private val BASE_URL: String = "http://4de23f4f50e3.ngrok.io"
     private var sharedPreferences: SharedPreferences? = null
-
     private var _binding: FragmentBlankBinding? = null
-
     // This property is only valid between onCreateView and
     // onDestroyView. !
     private val binding get() = _binding!!
@@ -51,7 +44,7 @@ class BlankFragment : Fragment() {
 
         var editor = sharedPreferences?.edit()
         editor?.putString("username", "gelopfalcon")
-        editor?.commit()
+        editor?.apply()
     }
 
     override fun onCreateView(
@@ -73,44 +66,26 @@ class BlankFragment : Fragment() {
         var recyclerView = binding.recyclerView
         var button: Button = view.findViewById(R.id.button2)
 
-        val service = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(TechTalkService::class.java)
+        model.getTechTalks()
+        model.techTalksLiveData.observe(viewLifecycleOwner, Observer {
+            /* This will print the response of the network call to the Logcat */
+            Log.d("TAG_", it.toString())
 
-        service.getTechTalks().enqueue(object : Callback<List<TechTalkDto>> {
+            recyclerView.apply {
+                // set a LinearLayoutManager to handle Android
+                // RecyclerView behavior
+                layoutManager = LinearLayoutManager(activity)
+                // set the custom adapter to the RecyclerView
+                adapter = RecyclerAdapter(it)
 
-            /* The HTTP call failed. This method is run on the main thread */
-            override fun onFailure(call: Call<List<TechTalkDto>>, t: Throwable) {
-                Log.d("TAG_", "An error happened!")
+                recyclerView.layoutManager = layoutManager;
+                recyclerView.adapter = adapter
 
-            }
-
-            /* The HTTP call was successful, we should still check status code and response body
-             * on a production app. This method is run on the main thread */
-            override fun onResponse(
-                call: Call<List<TechTalkDto>>,
-                response: Response<List<TechTalkDto>>
-            ) {
-                /* This will print the response of the network call to the Logcat */
-                Log.d("TAG_", response.body().toString())
-
-                recyclerView.apply {
-                    // set a LinearLayoutManager to handle Android
-                    // RecyclerView behavior
-                    layoutManager = LinearLayoutManager(activity)
-                    // set the custom adapter to the RecyclerView
-                    adapter = RecyclerAdapter(response.body().orEmpty())
-
-                    recyclerView.layoutManager = layoutManager;
-                    recyclerView.adapter = adapter
-
-                }
             }
         })
 
-        button.setOnClickListener { v -> findNavController().navigate(BlankFragmentDirections.actionBlankFragmentToSecondFragment()) };
+
+        button.setOnClickListener { v -> findNavController().navigate(TechTalkFragmentDirections.actionBlankFragmentToSecondFragment()) };
 
     }
 
